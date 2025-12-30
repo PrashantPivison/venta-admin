@@ -1,48 +1,76 @@
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosInstance, AxiosError } from 'axios';
 import authService from './authService';
 
-const API_BASE_URL = 'http://localhost:5000/api/admin';
+/**
+ * API Base URL
+ * - Local: http://localhost:5000
+ * - Ngrok: https://xxxx.ngrok-free.app
+ * - Prod: https://api.yourdomain.com
+ */
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 /**
- * Common axios instance for all services
- * Includes:
- * - Base URL configuration
- * - Authorization header injection
- * - Automatic token refresh on 401 errors
+ * Axios instance
  */
 const apiClient: AxiosInstance = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: `${API_BASE_URL}/api/admin`,
   headers: {
-    'ngrok-skip-browser-warning': 'true',
     'Content-Type': 'application/json',
+    // REQUIRED for ngrok free URLs
+    'ngrok-skip-browser-warning': 'true',
   },
+  withCredentials: true, // safe for future cookies
 });
 
-// Add token to every request
-apiClient.interceptors.request.use((config) => {
-  const token = authService.getAccessToken();
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
+/**
+ * Request Interceptor
+ * - Attach access token if available
+ */
+apiClient.interceptors.request.use(
+  (config) => {
+    const token = authService.getAccessToken();
 
-// Handle 401 errors (token expired) and refresh token
+    if (token) {
+      config.headers = config.headers || {};
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+/**
+ * Response Interceptor
+ * - Handle expired access token (401)
+ * - Refresh token once
+ * - Retry original request
+ */
 apiClient.interceptors.response.use(
   (response) => response,
-  async (error) => {
-    if (error.response?.status === 401) {
+  async (error: AxiosError) => {
+    const originalRequest: any = error.config;
+
+    // Prevent infinite retry loop
+    if (error.response?.status === 401 && !originalRequest?._retry) {
+      originalRequest._retry = true;
+
       try {
-        const newToken = await authService.refreshAccessToken();
-        if (error.config) {
-          error.config.headers.Authorization = `Bearer ${newToken}`;
-          return apiClient(error.config);
+        const newAccessToken = await authService.refreshAccessToken();
+
+        if (newAccessToken) {
+          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+          return apiClient(originalRequest);
         }
-      } catch {
-        // Refresh token failed, user needs to login again
-        window.location.href = '/admin/login';
+      } catch (refreshError) {
+        // Token refresh failed → force logout
+       
+        window.location.href = '/login';
+        return Promise.reject(refreshError);
       }
     }
+
     return Promise.reject(error);
   }
 );
