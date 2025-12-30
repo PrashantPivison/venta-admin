@@ -16,7 +16,7 @@ const API_BASE_URL =
 const apiClient: AxiosInstance = axios.create({
   baseURL: `${API_BASE_URL}/admin`,
   headers: {
-    'Content-Type': 'application/json',
+    // 'Content-Type': 'application/json',
     // REQUIRED for ngrok free URLs
     'ngrok-skip-browser-warning': 'true',
   },
