@@ -1,4 +1,5 @@
 import axios from 'axios';
+import apiClient from './apiClient';
 
 const API_BASE_URL = 'https://71b75c479442.ngrok-free.app/api/admin';
 
@@ -26,34 +27,37 @@ class AuthService {
   /**
    * Login with email or username
    */
-  async loginAdmin(emailOrUsername: string, password: string): Promise<LoginResponse> {
-    try {
-      const loginData: LoginRequest = {
-        password,
-      };
+async loginAdmin(
+  emailOrUsername: string,
+  password: string
+): Promise<LoginResponse> {
+  const loginData: LoginRequest = { password };
 
-      // Check if it's an email or username
-      if (emailOrUsername.includes('@')) {
-        loginData.email = emailOrUsername;
-      } else {
-        loginData.username = emailOrUsername;
-      }
-
-      const response = await axios.post<LoginResponse>(`${API_BASE_URL}/auth/login`, loginData);
-
-      // Store tokens and user
-      localStorage.setItem(this.ACCESS_TOKEN_KEY, response.data.accessToken);
-      localStorage.setItem(this.REFRESH_TOKEN_KEY, response.data.refreshToken);
-      localStorage.setItem(this.USER_KEY, JSON.stringify(response.data.admin));
-
-      return response.data;
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        throw new Error(error.response?.data?.error || 'Login failed');
-      }
-      throw error;
-    }
+  if (emailOrUsername.includes('@')) {
+    loginData.email = emailOrUsername;
+  } else {
+    loginData.username = emailOrUsername;
   }
+
+  try {
+    // ❌ NO Authorization header here
+    const response = await apiClient.post<LoginResponse>(
+      '/auth/login',
+      loginData
+    );
+
+    // Store tokens
+    localStorage.setItem('accessToken', response.data.accessToken);
+    localStorage.setItem('refreshToken', response.data.refreshToken);
+    localStorage.setItem('admin', JSON.stringify(response.data.admin));
+
+    return response.data;
+  } catch (error: any) {
+    throw new Error(
+      error?.response?.data?.error || 'Login failed'
+    );
+  }
+}
 
   /**
    * Refresh access token using refresh token
