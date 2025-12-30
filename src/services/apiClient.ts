@@ -13,6 +13,7 @@ const API_BASE_URL = 'http://localhost:5000/api/admin';
 const apiClient: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,
   headers: {
+    'ngrok-skip-browser-warning': 'true',
     'Content-Type': 'application/json',
   },
 });
