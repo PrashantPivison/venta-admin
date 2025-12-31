@@ -20,9 +20,9 @@ interface LoginResponse {
 }
 
 class AuthService {
-  private readonly ACCESS_TOKEN_KEY = 'adminAccessToken';
-  private readonly REFRESH_TOKEN_KEY = 'adminRefreshToken';
-  private readonly USER_KEY = 'adminUser';
+  private readonly ACCESS_TOKEN_KEY = 'ventaAccessToken';
+  private readonly REFRESH_TOKEN_KEY = 'ventaRefreshToken';
+  private readonly USER_KEY = 'ventaUser';
 
   /**
    * Login with email or username
@@ -47,9 +47,9 @@ async loginAdmin(
     );
 
     // Store tokens
-    localStorage.setItem('accessToken', response.data.accessToken);
-    localStorage.setItem('refreshToken', response.data.refreshToken);
-    localStorage.setItem('admin', JSON.stringify(response.data.admin));
+    localStorage.setItem(this.ACCESS_TOKEN_KEY, response.data.accessToken);
+    localStorage.setItem(this.REFRESH_TOKEN_KEY, response.data.refreshToken);
+    localStorage.setItem(this.USER_KEY, JSON.stringify(response.data.admin));
 
     return response.data;
   } catch (error: any) {
