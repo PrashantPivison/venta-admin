@@ -12,13 +12,12 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
 /**
  * Axios instance
  */
-const apiClient: AxiosInstance = axios.create({
-  baseURL: `${API_BASE_URL}/admin`,
+const apiClient = axios.create({
+  baseURL: `${API_BASE_URL}/api/admin`,
   headers: {
     'Content-Type': 'application/json',
-
   },
-  withCredentials: true, // safe for future cookies
+  withCredentials: true,
 });
 
 /**
