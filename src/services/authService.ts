@@ -1,7 +1,7 @@
 import axios from 'axios';
 import apiClient from './apiClient';
 
-const API_BASE_URL = 'https://71b75c479442.ngrok-free.app/api/admin';
+const API_BASE_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5000/api') + '/admin';
 
 interface LoginRequest {
   email?: string;

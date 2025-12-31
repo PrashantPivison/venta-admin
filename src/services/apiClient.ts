@@ -7,7 +7,7 @@ import authService from './authService';
  * - Ngrok: https://xxxx.ngrok-free.app
  * - Prod: https://api.yourdomain.com
  */
-const API_BASE_URL ='https://71b75c479442.ngrok-free.app/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 /**
  * Axios instance
