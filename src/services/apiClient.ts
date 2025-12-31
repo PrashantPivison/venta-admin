@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosError } from 'axios';
+import axios, { AxiosError } from 'axios';
 import authService from './authService';
 
 /**
