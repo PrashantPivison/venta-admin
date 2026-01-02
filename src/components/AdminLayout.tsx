@@ -22,7 +22,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
   const navItems = [
     { path: '/dashboard', label: 'Dashboard', icon: '📊' },
     { path: '/products', label: 'Products', icon: '📦' },
-    { path: '/orders', label: 'Custom Orders', icon: '📋' },
+    { path: '/custom-products', label: 'Custom Orders', icon: '📋' },
   ];
 
   return (

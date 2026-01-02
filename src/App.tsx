@@ -7,6 +7,9 @@ import { ProductsListing } from './pages/admin/ProductsListing';
 import { ProductManage } from './pages/admin/ProductManage';
 import { ProductDetails } from './pages/admin/ProductDetails';
 import { CustomOrders } from './pages/admin/CustomOrders';
+import { CustomProducts } from './pages/admin/CustomProducts';
+import { CustomProductManage } from './pages/admin/CustomProductManage';
+import { CustomProductDetails } from './pages/admin/CustomProductDetails';
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -95,9 +98,14 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-
+<Route path="/custom-products" element={<CustomProducts />} />
+<Route path="/custom-products/new" element={<CustomProductManage />} />
+<Route path="/custom-products/edit/:id" element={<CustomProductManage />} />
+<Route path="/custom-products/view/:id" element={<CustomProductDetails />} />
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
+
+
       </Routes>
     </BrowserRouter>
   );
