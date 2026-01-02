@@ -73,6 +73,15 @@ class CustomOrderService {
     }
   }
 
+  async getCategories() {
+    try {
+      const response = await apiClient.get('/custom/categories');
+      return response.data.data || [];
+    } catch (error: any) {
+      throw new Error(error.response?.data?.message || 'Failed to fetch categories');
+    }
+  }
+
   // ====== INQUIRIES ======
 
   async getInquiries() {
@@ -118,6 +127,27 @@ class CustomOrderService {
     } catch (error: any) {
       throw new Error(error.response?.data?.message || 'Failed to delete inquiry');
     }
+  }
+
+  // ====== CUSTOM ORDERS ======
+
+  async getCustomOrders() {
+    try {
+      const response = await apiClient.get('/custom/orders');
+      return response.data.data || [];
+    } catch (error: any) {
+      throw new Error(error.response?.data?.message || 'Failed to fetch custom orders');
+    }
+  }
+
+  // ====== ALIASES FOR COMPATIBILITY ======
+
+  async getProductInquiries(productId: string) {
+    return this.getInquiriesByProduct(productId);
+  }
+
+  async updateCustomOrderStatus(id: string, data: { status?: string; notes?: string }) {
+    return this.updateInquiryStatus(id, { status: data.status, adminNotes: data.notes });
   }
 }
 
