@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Button } from './ui/Button';
 import { Modal } from './ui/Modal';
 import { TextArea, Select } from './ui/Form';
-import { StatusBadge } from './ui/StatusBadge';
 import { EmptyState } from './ui/States';
 import { Contact } from '../services/contactService';
 import contactService from '../services/contactService';

@@ -22,12 +22,7 @@ export const Contacts: React.FC = () => {
     pages: 1,
     limit: 20,
   });
-  const [stats, setStats] = useState({
-    total: 0,
-    new: 0,
-    inProgress: 0,
-    resolved: 0,
-  });
+
 
   const statuses = ['All', 'New', 'In Progress', 'Resolved', 'Closed'];
 
@@ -49,9 +44,7 @@ export const Contacts: React.FC = () => {
       setContacts(result.data);
       setPagination(result.pagination);
 
-      // Load stats
-      const statsResult = await contactService.getContactStats();
-      setStats(statsResult.data);
+     
     } catch (err: any) {
       setError(err.message || 'Failed to load contacts');
       console.error('Error loading contacts:', err);
