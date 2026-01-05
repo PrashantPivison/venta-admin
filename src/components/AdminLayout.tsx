@@ -23,6 +23,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
     { path: '/dashboard', label: 'Dashboard', icon: '📊' },
     { path: '/products', label: 'Products', icon: '📦' },
     { path: '/custom-products', label: 'Custom Orders', icon: '📋' },
+    { path: '/contacts', label: 'Contacts', icon: '✉️' },
   ];
 
   return (
